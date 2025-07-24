@@ -1,12 +1,18 @@
+package manager;
+
+import tasks.Epic;
+import tasks.ProgressStatus;
+import tasks.Subtask;
+import tasks.Task;
+
 import java.util.*;
 
 public class TaskManager {
+    private int nextId = 1;
 
-    private final Map<Integer, Task> taskMap = new HashMap<>();
-    private final Map<Integer, Epic> epicMap = new HashMap<>();
-    private final Map<Integer, Subtask> subtaskMap = new HashMap<>();
-
-
+    private int generateId() {
+        return nextId++;
+    }
 
     public Task getTask(int id) {
         return taskMap.get(id);
@@ -20,6 +26,28 @@ public class TaskManager {
         return subtaskMap.get(id);
     }
 
+    private final Map<Integer, Task> taskMap = new HashMap<>();
+    private final Map<Integer, Epic> epicMap = new HashMap<>();
+    private final Map<Integer, Subtask> subtaskMap = new HashMap<>();
+
+    public Task createTask(String name, String description) {
+        Task t = new Task(generateId(), name, description, ProgressStatus.NEW);
+        addTask(t);
+        return t;
+    }
+
+    public Epic createEpic(String name, String description) {
+        Epic e = new Epic(generateId(), name, description);
+        addEpic(e);
+        return e;
+    }
+
+    public Subtask createSubtask(String name, String description,
+                                 ProgressStatus status, int epicId) {
+        Subtask s = new Subtask(generateId(), name, description, status, epicId);
+        addSubtask(s);
+        return s;
+    }
 
 
     public void addTask(Task task) {

@@ -1,3 +1,9 @@
+import manager.TaskManager;
+import tasks.Epic;
+import tasks.ProgressStatus;
+import tasks.Subtask;
+import tasks.Task;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -6,6 +12,9 @@ public class Main {
     private static final TaskManager mgr = new TaskManager();
 
     public static void main(String[] args) {
+
+        runTests();
+
         while (true) {
             printMenu();
             String choice = scanner.nextLine().trim();
@@ -16,8 +25,8 @@ public class Main {
                     String tName = scanner.nextLine().trim();
                     System.out.print("Описание задачи:");
                     String tDesc = scanner.nextLine().trim();
-                    mgr.addTask(new Task(tName, tDesc, ProgressStatus.NEW));
-                    System.out.println("Задача создана.");
+                    Task task = mgr.createTask(tName, tDesc);
+                    System.out.println("Задача создана, ID =" + task.getId());
                     break;
 
                 case "2":
@@ -25,31 +34,32 @@ public class Main {
                     String eName = scanner.nextLine().trim();
                     System.out.print("Описание эпика:");
                     String eDesc = scanner.nextLine().trim();
-                    mgr.addEpic(new Epic(eName, eDesc));
-                    System.out.println("Эпик создан");
+                    Epic epic = mgr.createEpic(eName, eDesc);
+                    System.out.println("Эпик создан, ID = " + epic.getId());
                     break;
 
                 case "3":
                     System.out.print("ID эпика:");
                     int parentId = Integer.parseInt(scanner.nextLine().trim());
-                    System.out.print("Название подзадачи: ");
+                    System.out.print("Название подзадачи:");
                     String sName = scanner.nextLine().trim();
                     System.out.print("Описание подзадачи:");
                     String sDesc = scanner.nextLine().trim();
-                    mgr.addSubtask(new Subtask(sName, sDesc, ProgressStatus.NEW, parentId));
+                    Subtask sub = mgr.createSubtask(sName, sDesc, ProgressStatus.NEW, parentId);
+                    System.out.println("Подзадача создана, ID = " + sub.getId());
                     break;
 
                 case "4":
                     List<Task> tasks = mgr.getAllTasks();
-                    for (Task task : tasks) {
-                        System.out.println(task);
+                    for (Task tas : tasks) {
+                        System.out.println(tas);
                     }
                     break;
 
                 case "5":
                     List<Epic> epics = mgr.getAllEpics();
-                    for (Epic epic : epics) {
-                        System.out.println(epic);
+                    for (Epic epi : epics) {
+                        System.out.println(epi);
                     }
                     break;
 
@@ -57,21 +67,20 @@ public class Main {
                     System.out.print("ID эпика:");
                     int epicId = Integer.parseInt(scanner.nextLine().trim());
                     List<Subtask> subs = mgr.getSubtasksOfEpic(epicId);
-                    System.out.println(epicId);
-                    for (Subtask sub : subs) {
-                        System.out.println(sub);
+                    for (Subtask su : subs) {
+                        System.out.println(su);
                     }
                     break;
 
                 case "7":
-                    System.out.print("ID задачи: ");
+                    System.out.print("ID задачи:");
                     int delId = Integer.parseInt(scanner.nextLine().trim());
                     mgr.deleteTask(delId);
                     System.out.println("Удаление выполнено.");
                     break;
 
                 case "8":
-                    System.out.print("ID задачи: ");
+                    System.out.print("ID задачи:");
                     int updId = Integer.parseInt(scanner.nextLine().trim());
                     System.out.print("Новый статус (NEW, IN_PROGRESS, DONE): ");
                     String st = scanner.nextLine().trim();
@@ -89,6 +98,75 @@ public class Main {
             }
         }
     }
+
+    private static void runTests() {
+        TaskManager testMgr = new TaskManager();
+
+        Task t1 = testMgr.createTask("task1", "dcscscds");
+        Task t2 = testMgr.createTask("task2", "dcscscds");
+        Epic  e1 = testMgr.createEpic("task3", "dcscscds");
+        Epic  e2 = testMgr.createEpic("task4", "dcscscds");
+        Subtask s1 = testMgr.createSubtask("task5", "dcscscds", ProgressStatus.NEW, e1.getId());
+        Subtask s2 = testMgr.createSubtask("task6", "dcscscds", ProgressStatus.NEW, e1.getId());
+        Subtask s3 = testMgr.createSubtask("task7", "dcscscds", ProgressStatus.NEW, e2.getId());
+
+        for (Task t : testMgr.getAllTasks()) {
+            System.out.println(t.getId());
+            System.out.println(t.getName());
+            System.out.println(t.getDescription());
+            System.out.println(t.getStatus());
+        }
+
+        for (Epic e : testMgr.getAllEpics()) {
+            System.out.println(e.getId());
+            System.out.println(e.getName());
+            System.out.println(e.getDescription());
+            System.out.println(e.getStatus());
+            System.out.println(e.getSubtaskIds());
+        }
+
+        for (Subtask s : testMgr.getSubtasksOfEpic(e1.getId())) {
+            System.out.println(s.getId());
+            System.out.println(s.getName());
+            System.out.println(s.getDescription());
+            System.out.println(s.getStatus());
+            System.out.println(s.getEpicId());
+        }
+
+        for (Subtask s : testMgr.getSubtasksOfEpic(e2.getId())) {
+            System.out.println(s.getId());
+            System.out.println(s.getName());
+            System.out.println(s.getDescription());
+            System.out.println(s.getStatus());
+            System.out.println(s.getEpicId());
+        }
+
+        testMgr.updateTaskStatus(t1.getId(), ProgressStatus.IN_PROGRESS);
+        testMgr.updateTaskStatus(s1.getId(), ProgressStatus.DONE);
+        testMgr.updateTaskStatus(s2.getId(), ProgressStatus.DONE);
+
+        System.out.println(testMgr.getTask(t1.getId()).getStatus());
+        System.out.println(testMgr.getEpic(e1.getId()).getStatus());
+
+        testMgr.deleteTask(t2.getId());
+        testMgr.deleteEpic(e2.getId());
+
+        for (Task t : testMgr.getAllTasks()) {
+            System.out.println(t.getId() + " " + t.getName() + " " + t.getStatus());
+        }
+
+        System.out.println("Remaining Epics:");
+        for (Epic e : testMgr.getAllEpics()) {
+            System.out.println(e.getId() + " " + e.getName() + " " + e.getStatus());
+        }
+
+        testMgr.deleteTask(t1.getId());
+        testMgr.deleteEpic(e1.getId());
+
+        System.out.println(testMgr.getAllTasks());
+        System.out.println(testMgr.getAllEpics());
+    }
+
 
     private static void printMenu() {
         System.out.println("Выбирете пункт в меню -");

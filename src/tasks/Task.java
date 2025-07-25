@@ -15,14 +15,33 @@ public class Task {
         this.status = status;
     }
 
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public String getDescription() { return description; }
-    public ProgressStatus getStatus() { return status; }
+    public int getId() {
+        return id;
+    }
 
-    public void setName(String name) { this.name = name; }
-    public void setDescription(String description) { this.description = description; }
-    public void setStatus(ProgressStatus status) { this.status = status; }
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public ProgressStatus getStatus() {
+        return status;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStatus(ProgressStatus status) {
+        this.status = status;
+    }
 
     @Override
     public boolean equals(Object o) {

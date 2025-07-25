@@ -104,8 +104,8 @@ public class Main {
 
         Task t1 = testMgr.createTask("task1", "dcscscds");
         Task t2 = testMgr.createTask("task2", "dcscscds");
-        Epic  e1 = testMgr.createEpic("task3", "dcscscds");
-        Epic  e2 = testMgr.createEpic("task4", "dcscscds");
+        Epic e1 = testMgr.createEpic("task3", "dcscscds");
+        Epic e2 = testMgr.createEpic("task4", "dcscscds");
         Subtask s1 = testMgr.createSubtask("task5", "dcscscds", ProgressStatus.NEW, e1.getId());
         Subtask s2 = testMgr.createSubtask("task6", "dcscscds", ProgressStatus.NEW, e1.getId());
         Subtask s3 = testMgr.createSubtask("task7", "dcscscds", ProgressStatus.NEW, e2.getId());
@@ -166,7 +166,6 @@ public class Main {
         System.out.println(testMgr.getAllTasks());
         System.out.println(testMgr.getAllEpics());
     }
-
 
     private static void printMenu() {
         System.out.println("Выбирете пункт в меню -");

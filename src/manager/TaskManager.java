@@ -9,6 +9,9 @@ import java.util.*;
 
 public class TaskManager {
     private int nextId = 1;
+    private final Map<Integer, Task> taskMap = new HashMap<>();
+    private final Map<Integer, Epic> epicMap = new HashMap<>();
+    private final Map<Integer, Subtask> subtaskMap = new HashMap<>();
 
     private int generateId() {
         return nextId++;
@@ -25,10 +28,6 @@ public class TaskManager {
     public Subtask getSubtask(int id) {
         return subtaskMap.get(id);
     }
-
-    private final Map<Integer, Task> taskMap = new HashMap<>();
-    private final Map<Integer, Epic> epicMap = new HashMap<>();
-    private final Map<Integer, Subtask> subtaskMap = new HashMap<>();
 
     public Task createTask(String name, String description) {
         Task t = new Task(generateId(), name, description, ProgressStatus.NEW);
@@ -49,11 +48,9 @@ public class TaskManager {
         return s;
     }
 
-
     public void addTask(Task task) {
         taskMap.put(task.getId(), task);
     }
-
 
     public void addEpic(Epic epic) {
         epicMap.put(epic.getId(), epic);

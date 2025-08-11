@@ -3,16 +3,28 @@ package tasks;
 import java.util.Objects;
 
 public class Task {
-    private final int id;
+    private int id;
     private String name;
     private String description;
     private ProgressStatus status;
 
-    public Task(int id, String name, String description, ProgressStatus status) {
-        this.id = id;
+    public Task(String name, String description, ProgressStatus status) {
         this.name = name;
         this.description = description;
         this.status = status;
+    }
+
+    public Task(int id, String name, String description, ProgressStatus status) {
+        this(name, description, status);
+        this.id = id;
+    }
+
+    public Task(Task other) {
+        this(other.id, other.name, other.description, other.status);
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -48,21 +60,21 @@ public class Task {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
         Task task = (Task) o;
-        return id == task.id;
+        return id != 0 && id == task.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Integer.hashCode(id);
     }
 
     @Override
     public String toString() {
         return "Task{" +
-                "description='" + description + '\'' +
-                ", id=" + id +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", status=" + status +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

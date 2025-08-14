@@ -1,6 +1,9 @@
 package manager;
+
 import tasks.*;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -16,12 +19,13 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        return List.copyOf(history);
+        return Collections.unmodifiableList(new ArrayList<>(history));
     }
 
-    private Task snapshotOf(Task t) {
-        if (t instanceof Subtask s) return new Subtask(s);
-        if (t instanceof Epic e) return new Epic(e);
-        return new Task(t);
+    private Task snapshotOf(Task task) {
+        if (task instanceof Subtask) return new Subtask((Subtask) task);
+        if (task instanceof Epic) return new Epic((Epic) task);
+        return new Task(task);
     }
 }
+

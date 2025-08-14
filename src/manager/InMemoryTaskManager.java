@@ -53,16 +53,16 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int id) {
-        Task t = taskMap.get(id);
-        if (t != null) history.add(t);
-        return t;
+        Task task = taskMap.get(id);
+        if (task != null) history.add(task);
+        return task;
     }
 
     @Override
     public Epic getEpic(int id) {
-        Epic e = epicMap.get(id);
-        if (e != null) history.add(e);
-        return e;
+        Epic epic = epicMap.get(id);
+        if (epic != null) history.add(epic);
+        return epic;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Subtask> getSubtasksOfEpic(int epicId) {
         Epic epic = epicMap.get(epicId);
-        if (epic == null) return List.of();
+        if (epic == null) return Collections.emptyList();
         List<Subtask> list = new ArrayList<>();
         for (int sid : epic.getSubtaskIds()) {
             Subtask s = subtaskMap.get(sid);
@@ -151,10 +151,44 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
+    public int updateTask(Task task) {
+        int id = task.getId();
+        if (!taskMap.containsKey(id)) {
+            System.out.println("Задача не найдена");
+            return -1;
+        }
+        taskMap.put(id, task);
+        return id;
+    }
+
+    @Override
+    public int updateEpic(Epic epic) {
+        int id = epic.getId();
+        if (!epicMap.containsKey(id)) {
+            System.out.println("Эпик не найден");
+            return -1;
+        }
+        epicMap.put(id, epic);
+        return id;
+    }
+
+    @Override
+    public int updateSubtask(Subtask subtask) {
+        int id = subtask.getId();
+        if (!subtaskMap.containsKey(id)) {
+            System.out.println("Подзадача не найдена");
+            return -1;
+        }
+        subtaskMap.put(id, subtask);
+        updateEpicStatus(subtask.getEpicId());
+        return id;
+    }
+
     private void updateEpicStatus(int epicId) {
         Epic e = epicMap.get(epicId);
         if (e == null) return;
-        var subs = e.getSubtaskIds();
+        List<Integer> subs = e.getSubtaskIds();
         if (subs.isEmpty()) {
             e.setStatus(ProgressStatus.NEW);
             return;

@@ -33,6 +33,12 @@ public interface TaskManager {
 
     void deleteSubtask(int id);
 
+    int updateTask(Task task);
+
+    int updateEpic(Epic epic);
+
+    int updateSubtask(Subtask subtask);
+
     List<Task> getHistory();
 }
 

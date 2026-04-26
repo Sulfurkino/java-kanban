@@ -5,30 +5,24 @@ public class    Timetable {
     private Map<DayOfWeek, TreeMap<LocalTime, List<TrainingSession>>> timetable = new HashMap<>();
 
     public Timetable() {
-        this.timetable.put(DayOfWeek.MONDAY, new TreeMap<>());
-        this.timetable.put(DayOfWeek.TUESDAY, new TreeMap<>());
-        this.timetable.put(DayOfWeek.WEDNESDAY, new TreeMap<>());
-        this.timetable.put(DayOfWeek.THURSDAY, new TreeMap<>());
-        this.timetable.put(DayOfWeek.FRIDAY, new TreeMap<>());
-        this.timetable.put(DayOfWeek.SATURDAY, new TreeMap<>());
-        this.timetable.put(DayOfWeek.SUNDAY, new TreeMap<>());
+        timetable.put(DayOfWeek.MONDAY, new TreeMap<>());
+        timetable.put(DayOfWeek.TUESDAY, new TreeMap<>());
+        timetable.put(DayOfWeek.WEDNESDAY, new TreeMap<>());
+        timetable.put(DayOfWeek.THURSDAY, new TreeMap<>());
+        timetable.put(DayOfWeek.FRIDAY, new TreeMap<>());
+        timetable.put(DayOfWeek.SATURDAY, new TreeMap<>());
+        timetable.put(DayOfWeek.SUNDAY, new TreeMap<>());
 
     }
 
-    public List<TrainingSession> getTrainingSessionForDay (DayOfWeek dayOfWeek){
-        TreeMap<LocalTime,List<TrainingSession>> treeMapOfDay = timetable.get(dayOfWeek);
-        //возвращаем пустой список если значение пустое
-        if (treeMapOfDay == null){
-            return Collections.emptyList();
+
+    public TreeMap<LocalTime, List<TrainingSession>> getTrainingSessionsForDay(DayOfWeek dayOfWeek) {
+        TreeMap<LocalTime, List<TrainingSession>> trainingsForDay = timetable.get(dayOfWeek);
+        if (trainingsForDay == null) {
+            return new TreeMap<>();
         }
 
-        List<TrainingSession> result = new ArrayList<>();
-        // перебираем значения и сразу добавляем их в переменную результат в один список
-        for (List<TrainingSession> trainingSessions : treeMapOfDay.values()){
-            result.addAll(trainingSessions);
-        }
-
-        return result;
+        return trainingsForDay;
     }
 
     public void addNewTrainingSession(TrainingSession trainingSession) {

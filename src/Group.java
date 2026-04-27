@@ -5,7 +5,7 @@ public class Group {
     private String title;
     private int duration;
 
-    public Group(String title,Age age,int duration) {
+    public Group(String title, Age age, int duration) {
         this.age = age;
         this.title = title;
         this.duration = duration;

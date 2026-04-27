@@ -1,7 +1,7 @@
 import java.time.LocalTime;
 import java.util.*;
 
-public class    Timetable {
+public class Timetable {
     private Map<DayOfWeek, TreeMap<LocalTime, List<TrainingSession>>> timetable = new HashMap<>();
 
     public Timetable() {
@@ -16,13 +16,20 @@ public class    Timetable {
     }
 
 
-    public TreeMap<LocalTime, List<TrainingSession>> getTrainingSessionsForDay(DayOfWeek dayOfWeek) {
+    public List<TrainingSession> getTrainingSessionForDay(DayOfWeek dayOfWeek) {
         TreeMap<LocalTime, List<TrainingSession>> trainingsForDay = timetable.get(dayOfWeek);
+
         if (trainingsForDay == null) {
-            return new TreeMap<>();
+            return new ArrayList<>();
         }
 
-        return trainingsForDay;
+        List<TrainingSession> result = new ArrayList<>();
+
+        for (List<TrainingSession> sessions : trainingsForDay.values()) {
+            result.addAll(sessions);
+        }
+
+        return result;
     }
 
     public void addNewTrainingSession(TrainingSession trainingSession) {
@@ -30,7 +37,7 @@ public class    Timetable {
 
         //достаём значение из timetable
         TreeMap<LocalTime, List<TrainingSession>> timetableValue = timetable.get(trainingSession.getDayOfWeek());
-        if (timetableValue.containsKey(trainingSession.getStartTime())){
+        if (timetableValue.containsKey(trainingSession.getStartTime())) {
             timetableValue.get(trainingSession.getStartTime()).add(trainingSession);
         } else {
             List<TrainingSession> sessions = new ArrayList<>();
@@ -42,11 +49,11 @@ public class    Timetable {
 
     }
 
-    public  List<TrainingSession> getTrainingSessionsForDayAndTime(DayOfWeek dayOfWeek, LocalTime localTime) {
+    public List<TrainingSession> getTrainingSessionsForDayAndTime(DayOfWeek dayOfWeek, LocalTime localTime) {
         //как реализовать, тоже непонятно, но сложность должна быть О(1)
         TreeMap<LocalTime, List<TrainingSession>> timeListTreeMap = timetable.get(dayOfWeek);
         List<TrainingSession> trainingSessionList = timeListTreeMap.get(localTime);
-        if (trainingSessionList == null){
+        if (trainingSessionList == null) {
             return Collections.emptyList();
         }
         return List.copyOf(trainingSessionList);

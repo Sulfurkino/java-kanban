@@ -1,2 +1,2 @@
-public class PlaceholderTest {
+public class tests {
 }
